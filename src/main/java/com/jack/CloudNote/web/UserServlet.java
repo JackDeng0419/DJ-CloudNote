@@ -15,7 +15,6 @@ import java.io.IOException;
 @WebServlet(name = "UserServlet", value = "/user")
 @MultipartConfig
 public class UserServlet extends HttpServlet {
-
     private UserService userService = new UserService();
 
 
