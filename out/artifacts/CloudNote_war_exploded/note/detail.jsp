@@ -19,7 +19,7 @@
                 发布时间：『 2016-08-04 22:46:45』&nbsp;&nbsp;云记类别：语录
             </div>
             <div class="note_content">
-                <p>adfasdf</p>
+                <p>adfasdffeaf</p>
             </div>
             <div class="note_btn">
                 <button class="btn btn-primary" type="button" onclick="update(28)">修改</button>

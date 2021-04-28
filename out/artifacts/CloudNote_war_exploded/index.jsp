@@ -53,7 +53,7 @@
                 <li <c:if test="${menu_page == 'user'}"> class="active"</c:if> > <a href="user?actionName=userCenter"><i class="glyphicon glyphicon-user"></i>&nbsp;个人中心</a>
                 <li <c:if test="${menu_page == 'report'}"> class="active"</c:if> > <a href="report"><i class="glyphicon glyphicon-signal"></i>&nbsp;数据报表</a></li>
 
-            </ul>
+                </ul>
             <form class="navbar-form navbar-right" role="search" action="main">
                 <div class="form-group">
                     <input type="hidden" name="act" value="searchKey">
@@ -72,8 +72,8 @@
                 <div class="userimg">
                     <img style="width:220px;height:160px" src="user?actionName=userHead&imageName=${user.head}">
                 </div>
-                <div class="nick">${user.nick}</div>
-                <div class="mood">${user.mood}</div>
+                <div class="nick">我思故我在</div>
+                <div class="mood">(以后的你会感谢现在努力的你)</div>
             </div>
             <div class="data_list">
                 <div class="data_list_title">
@@ -101,10 +101,16 @@
                 </div>
 
                 <div>
-                    <ul type="typeUl" class="nav nav-pills nav-stacked">
-                        <c:forEach items="${typeInfo}" var="item">
-                            <li id="li_${item.typeId}"><a href=""><span id="sp_${item.typeId}">${item.groupName}</span> <span class="badge">${item.noteCount}</span></a></li>
-                        </c:forEach>
+                    <ul class="nav nav-pills nav-stacked">
+
+                        <li><a href="main?act=searchType&amp;val=5&amp;valStr=test">test <span class="badge">0</span></a></li>
+
+                        <li><a href="main?act=searchType&amp;val=3&amp;valStr=%E5%B0%9A%E5%AD%A6%E5%A0%82%E7%AC%94%E8%AE%B0">笔记 <span class="badge">12</span></a></li>
+
+                        <li><a href="main?act=searchType&amp;val=2&amp;valStr=%E6%8A%80%E6%9C%AF">技术 <span class="badge">5</span></a></li>
+
+                        <li><a href="main?act=searchType&amp;val=4&amp;valStr=%E8%80%81%E8%A3%B4%E8%AF%AD%E5%BD%95">语录 <span class="badge">9</span></a></li>
+
                     </ul>
                 </div>
 
