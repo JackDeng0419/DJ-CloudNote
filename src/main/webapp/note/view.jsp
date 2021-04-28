@@ -23,22 +23,16 @@
                         </c:if>
                         <c:if test="${!empty typeList}">
                             <form class="form-horizontal" method="post" action="note">
+                                <%-- 隐藏域，用来存放用户行为的actionName--%>
+                                <input type="hidden" name="actionName" value="addOrUpdate">
                                 <div class="form-group">
                                     <label for="typeId" class="col-sm-2 control-label">类别:</label>
                                     <div class="col-sm-8">
                                         <select id="typeId" class="form-control" name="typeId">
-                                            <option value="-1">请选择云记类别...</option>
+                                            <option value="">请选择云记类别...</option>
 
                                             <c:forEach var="item" items="${typeList}">
-                                                <c:choose>
-                                                    <c:when test="${!empty resultInfo}">
-                                                        <option  <c:if test="${resultInfo.result.typeId == item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <option  <c:if test="${noteInfo.typeId == item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
-                                                    </c:otherwise>
-                                                </c:choose>
-
+                                                <option  <c:if test="${resultInfo.result.typeId == item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
                                             </c:forEach>
 
                                         </select>
@@ -49,7 +43,7 @@
                                     <input type="hidden" name="act" value="save">
                                     <label for="title" class="col-sm-2 control-label">标题:</label>
                                     <div class="col-sm-8">
-                                        <input class="form-control" name="title" id="title" placeholder="云记标题" value="123">
+                                        <input class="form-control" name="title" id="title" placeholder="云记标题" value="${resultInfo.result.title}">
                                     </div>
                                 </div>
 
@@ -58,13 +52,13 @@
                                     <label for="title" class="col-sm-2 control-label">内容:</label>
                                     <div class="col-sm-10">
                                             <%-- 准备容器，加载富文本编辑器 --%>
-                                        <textarea id="content" name="content">${noteInfo.content}</textarea>
+                                        <textarea id="content" name="content">${resultInfo.result.content}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-4 col-sm-4">
-                                        <input type="submit" class="btn btn-primary" onclick="return saveNote();" value="保存">
-                                        <font id="error" color="red"></font>
+                                        <input type="submit" class="btn btn-primary" onclick="return checkForm()" value="保存">
+                                        &nbsp;<span id="msg" style="font-size: 12px;color: red">${resultInfo.msg}</span>
                                     </div>
                                 </div>
                             </form>
@@ -77,10 +71,48 @@
     </div>
     <script type="text/javascript">
         //加载富文本编辑器到textarea容器
+        var ue;
         $(function(){
-            var ue = UE.getEditor('content');
+            ue = UE.getEditor('content');
         });
 
+        /**
+         * 表单校验
+
+         1. 获得表单元素的值
+         1. 获取下拉框的选项 .val()
+         2. 获取文本框（文章标题）.val()
+         3. 获取富文本编辑器的内容
+         1. 方法1： ue.getContent() 带html标签
+         2. 方法2：ue.getContentTxt() 不带html标签
+         2. 参数非空判断
+         1. 如果为空，显示一个swal提示
+         2. 不为空，提交表单
+         */
+        function checkForm() {
+            /*  1. 获取表单元素的值 */
+            // 获取下拉框选中的选项  .val()
+            var typeId = $("#typeId").val();
+            // 获取文本框的值       .val()
+            var title = $("#title").val();
+            //  获取富文本编辑器的内容 ue.getContent()
+            var content = ue.getContent();
+
+            /* 2. 参数的非空判断 */
+            if (isEmpty(typeId)) {
+                $("#msg").html("请选择云记类型！");
+                return false;
+            }
+            if (isEmpty(title)) {
+                $("#msg").html("云记标题不能为空！");
+                return false;
+            }
+            if (isEmpty(content)) {
+                $("#msg").html("云记内容不能为空！");
+                return false;
+            }
+            return true;
+        }
     </script>
 
 </div>
