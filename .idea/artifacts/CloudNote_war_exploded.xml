@@ -16,6 +16,8 @@
           <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
           <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.76" />
           <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.3.1" />
+          <element id="file-copy" path="$USER_HOME$/Downloads/P8项目资料（新传）(1)/001_Java入门级项目云日记/0807云记模块/002_code/lezijie-note/src/main/webapp/WEB-INF/lib/json.jar" />
+          <element id="file-copy" path="$USER_HOME$/Downloads/P8项目资料（新传）(1)/001_Java入门级项目云日记/0807云记模块/002_code/lezijie-note/src/main/webapp/WEB-INF/lib/ueditor-1.1.2.jar" />
         </element>
       </element>
       <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-core:2.8.2" />

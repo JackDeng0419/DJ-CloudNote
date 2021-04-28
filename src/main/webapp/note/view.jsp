@@ -56,7 +56,7 @@
                                 <%-- 富文本编辑器区域--%>
                                 <div class="form-group">
                                     <label for="title" class="col-sm-2 control-label">内容:</label>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-10">
                                             <%-- 准备容器，加载富文本编辑器 --%>
                                         <textarea id="content" name="content">${noteInfo.content}</textarea>
                                     </div>
