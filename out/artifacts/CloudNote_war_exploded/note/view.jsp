@@ -34,7 +34,6 @@
                                             <c:forEach var="item" items="${typeList}">
                                                 <option  <c:if test="${resultInfo.result.typeId == item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
                                             </c:forEach>
-
                                         </select>
                                     </div>
                                 </div>
