@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.jack.CloudNote.dao.NoteDao;
 import com.jack.CloudNote.po.Note;
 import com.jack.CloudNote.util.Page;
+import com.jack.CloudNote.vo.NoteVo;
 import com.jack.CloudNote.vo.ResultInfo;
 
 import java.util.List;
@@ -33,6 +34,9 @@ public class NoteService {
         note.setTypeId(Integer.parseInt(typeId));
         note.setTitle(title);
         note.setContent(content);
+
+
+
         resultInfo.setResult(note);
 
         // 3. call the dao layer
@@ -81,7 +85,7 @@ public class NoteService {
         }
 
         // 2. 查询当前登录用户的云记数量，返回总记录数 （long类型）
-        long count = noteDao.findNoteCount(userId);
+        long count = noteDao.findNoteCount(userId, title, date, typeId);
 
         // 3. 判断总记录数是否大于0
         if (count < 1) {
@@ -103,5 +107,24 @@ public class NoteService {
         // 7. 返回Page对象
         return page;
 
+    }
+
+    public List<NoteVo> findNoteCountByDate(Integer userId) {
+        return noteDao.findNoteCountByDate(userId);
+    }
+
+    public List<NoteVo> findNoteCountByType(Integer userId) {
+        return noteDao.findNoteCountByType(userId);
+    }
+
+    public Note findNoteById(String noteId) {
+        // 1. 参数的非空判断
+        if (StrUtil.isBlank(noteId)) {
+            return null;
+        }
+        // 2. 调用Dao层的查询，通过noteId查询note对象
+        Note note = noteDao.findNoteById(noteId);
+        // 3. 返回note对象
+        return note;
     }
 }

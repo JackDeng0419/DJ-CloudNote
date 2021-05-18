@@ -4,19 +4,60 @@ import com.jack.CloudNote.po.Note;
 import com.jack.CloudNote.po.User;
 import com.jack.CloudNote.service.NoteService;
 import com.jack.CloudNote.util.Page;
+import com.jack.CloudNote.vo.NoteVo;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "IndexServlet", value = "/index")
 public class IndexServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("menu_page", "index");
+        request.setAttribute("menu_page", "index"); // 高亮显示
 
-        noteList(request, response, null, null, null);
+        // 得到用户行为 （判断是什么条件查询：标题查询、日期查询、类型查询）
+        String actionName = request.getParameter("actionName");
+        // 将用户行为设置到request作用域中 （分页导航中需要获取）
+        request.setAttribute("action", actionName);
+
+        // 判断用户行为
+        if ("searchTitle".equals(actionName)) { // 标题查询
+
+            // 得到查询条件：标题
+            String title = request.getParameter("title");
+            // 将查询条件设置到request请求域中（查询条件的回显）
+            request.setAttribute("title", title);
+
+            // 标题搜索
+            noteList(request, response, title, null, null);
+
+        } else if ("searchDate".equals(actionName)) { // 日期查询
+
+            // 得到查询条件：日期
+            String date = request.getParameter("date");
+            // 将查询条件设置到request请求域中（查询条件的回显）
+            request.setAttribute("date", date);
+
+            // 日期搜索
+            noteList(request, response, null, date, null);
+
+        } else if ("searchType".equals(actionName)) { // 类型查询
+
+            // 得到查询条件：类型ID
+            String typeId = request.getParameter("typeId");
+            // 将查询条件设置到request请求域中（查询条件的回显）
+            request.setAttribute("typeId", typeId);
+
+            // 日期搜索
+            noteList(request, response, null, null, typeId);
+
+        } else {
+            // 分页查询云记列表
+            noteList(request, response, null, null, null);
+        }
 
         request.setAttribute("changePage", "note/list.jsp");
         request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -35,6 +76,16 @@ public class IndexServlet extends HttpServlet {
 
         // 4. 将page对象设置到request作用域中
         request.setAttribute("page", page);
+
+        // 通过日期分组查询当前登录用户下的云记数量
+        List<NoteVo> dateInfo = new NoteService().findNoteCountByDate(user.getUserId());
+        // 设置集合存放在request作用域中
+        request.getSession().setAttribute("dateInfo", dateInfo);
+
+        // 通过类型分组查询当前登录用户下的云记数量
+        List<NoteVo> typeInfo = new NoteService().findNoteCountByType(user.getUserId());
+        // 设置集合存放在request作用域中
+        request.getSession().setAttribute("typeInfo", typeInfo);
     }
 
     @Override

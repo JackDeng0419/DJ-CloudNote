@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="col-md-9">
     <div class="data_list">
         <div class="data_list_title">
@@ -14,16 +15,16 @@
         <div>
 
 
-            <div class="note_title"><h2>123</h2></div>
+            <div class="note_title"><h2>${note.title}</h2></div>
             <div class="note_info">
-                发布时间：『 2016-08-04 22:46:45』&nbsp;&nbsp;云记类别：语录
+                发布时间：『<fmt:formatDate value="${note.pubTime}" pattern="yyyy-MM-dd HH:mm"/> 』&nbsp;&nbsp;云记类别：${note.typeName}
             </div>
             <div class="note_content">
-                <p>adfasdffeaf</p>
+                <p>${note.content}</p>
             </div>
             <div class="note_btn">
-                <button class="btn btn-primary" type="button" onclick="update(28)">修改</button>
-                <button class="btn btn-danger" type="button" onclick="del(28)">删除</button>
+                <button class="btn btn-primary" type="button" onclick="update(${note.noteId})">修改</button>
+                <button class="btn btn-danger" type="button" onclick="del(${note.noteId})">删除</button>
             </div>
 
 
@@ -35,7 +36,7 @@
 
     <script>
         function update(data){
-            window.location="note?noteId="+data;
+            window.location="note?actionName=view&noteId="+data;
         }
 
         function del(data){
@@ -48,9 +49,24 @@
                 cancelButtonText: "取消",//取消按钮文本
                 confirmButtonText: "是的，确定删除！"//确定按钮上面的文档
             }).then(function(isConfirm) {
-                if (isConfirm === true) {
-                    window.location="note?act=del&noteId="+data;
-                }
+                $.ajax({
+                    type:"post",
+                    url:"note",
+                    data:{
+                        actionName:"delete",
+                        noteId:noteId
+                    },
+                    success:function (code) {
+                        // 判断是否删除成功
+                        if (code == 1) {
+                            // 跳转到首页
+                            window.location.href = "index";
+                        } else {
+                            // 提示失败
+                            swal("","<h3>删除失败！</h3>", "error");
+                        }
+                    }
+                });
             });
         }
     </script>

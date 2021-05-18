@@ -32,7 +32,15 @@
                                             <option value="">请选择云记类别...</option>
 
                                             <c:forEach var="item" items="${typeList}">
-                                                <option  <c:if test="${resultInfo.result.typeId == item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
+                                                <c:choose>
+                                                    <c:when test="${!empty resultInfo}">
+                                                        <option  <c:if test="${resultInfo.result.typeId == item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option  <c:if test="${noteInfo.typeId == item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -42,16 +50,31 @@
                                     <input type="hidden" name="act" value="save">
                                     <label for="title" class="col-sm-2 control-label">标题:</label>
                                     <div class="col-sm-8">
-                                        <input class="form-control" name="title" id="title" placeholder="云记标题" value="${resultInfo.result.title}">
+                                        <c:choose>
+                                            <c:when test="${!empty resultInfo}">
+                                                <input class="form-control" name="title" id="title" placeholder="云记标题" value="${resultInfo.result.title}">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input class="form-control" name="title" id="title" placeholder="云记标题" value="${noteInfo.title}">
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </div>
 
                                 <%-- 富文本编辑器区域--%>
                                 <div class="form-group">
                                     <label for="title" class="col-sm-2 control-label">内容:</label>
-                                    <div class="col-sm-10">
-                                            <%-- 准备容器，加载富文本编辑器 --%>
-                                        <textarea id="content" name="content">${resultInfo.result.content}</textarea>
+                                    <div class="col-sm-8">
+                                        <c:choose>
+                                            <c:when test="${!empty resultInfo}">
+                                                <%-- 准备容器，加载富文本编辑器 --%>
+                                                <textarea id="content" name="content">${resultInfo.result.content}</textarea>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <%-- 准备容器，加载富文本编辑器 --%>
+                                                <textarea id="content" name="content">${noteInfo.content}</textarea>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </div>
                                 <div class="form-group">
