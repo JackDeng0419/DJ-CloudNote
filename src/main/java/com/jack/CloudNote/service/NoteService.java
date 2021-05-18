@@ -8,25 +8,37 @@ import com.jack.CloudNote.util.Page;
 import com.jack.CloudNote.vo.NoteVo;
 import com.jack.CloudNote.vo.ResultInfo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NoteService {
     NoteDao noteDao = new NoteDao();
 
-    public ResultInfo<Note> addOrUpdate(String typeId, String title, String content) {
+    public ResultInfo<Note> addOrUpdate(String typeId, String title, String content, String noteId, String lon, String lat) {
         ResultInfo<Note> resultInfo = new ResultInfo<>();
         // 1. the empty check of the parameters
         if(StrUtil.isBlank(typeId)) {
             resultInfo.setCode(0);
             resultInfo.setMsg("请选择云记类型");
+            return resultInfo;
         }
         if(StrUtil.isBlank(title)) {
             resultInfo.setCode(0);
             resultInfo.setMsg("云记标题不能为空");
+            return resultInfo;
         }
         if(StrUtil.isBlank(content)) {
             resultInfo.setCode(0);
             resultInfo.setMsg("云记内容不能为空");
+            return resultInfo;
+        }
+
+        // 设置经纬度的默认，默认设置为北京  116.404, 39.915
+        if (lon == null || lat == null) {
+            lon = "116.404";
+            lat = "39.915";
         }
 
         // 2. set the resultInfo
@@ -34,8 +46,13 @@ public class NoteService {
         note.setTypeId(Integer.parseInt(typeId));
         note.setTitle(title);
         note.setContent(content);
+        note.setLon(Float.parseFloat(lon));
+        note.setLat(Float.parseFloat(lat));
 
-
+        // 判断云记ID是否为空
+        if (!StrUtil.isBlank(noteId)) {
+            note.setNoteId(Integer.parseInt(noteId));
+        }
 
         resultInfo.setResult(note);
 
@@ -62,8 +79,8 @@ public class NoteService {
      * 2. 通过当前第几页，每页显示多少页，总笔记数创建Page对象
      * 3. 调用dao层查询响应页面的笔记列表，传入page对象
      * 4. 将笔记列表set到Page对象里面，并返回page对象
-     * @param pageNum
-     * @param pageSize
+     * @param pageNumStr
+     * @param pageSizeStr
      * @param userId
      * @param title
      * @param date
@@ -126,5 +143,65 @@ public class NoteService {
         Note note = noteDao.findNoteById(noteId);
         // 3. 返回note对象
         return note;
+    }
+
+    public ResultInfo<Map<String, Object>> queryNoteCountByMonth(Integer userId) {
+        ResultInfo<Map<String, Object>> resultInfo = new ResultInfo<>();
+
+        // 通过月份分类查询云记数量
+        List<NoteVo> noteVos = noteDao.findNoteCountByDate(userId);
+
+        // 判断集合是否存在
+        if (noteVos != null && noteVos.size() > 0) {
+            // 得到月份
+            List<String> monthList = new ArrayList<>();
+            // 得到云记集合
+            List<Integer> noteCountList = new ArrayList<>();
+
+            // 遍历月份分组集合
+            for (NoteVo noteVo: noteVos) {
+                monthList.add(noteVo.getGroupName());
+                noteCountList.add((int)noteVo.getNoteCount());
+            }
+
+            // 准备Map对象，封装对应的月份与云记数量
+            Map<String, Object> map = new HashMap<>();
+            map.put("monthArray", monthList);
+            map.put("dataArray", noteCountList);
+
+            // 将map对象设置到ResultInfo对象中
+            resultInfo.setCode(1);
+            resultInfo.setResult(map);
+        }
+        return resultInfo;
+    }
+
+    public ResultInfo<List<Note>> queryNoteLonAndLat(Integer userId) {
+        ResultInfo<List<Note>> resultInfo = new ResultInfo<>();
+
+        // 通过用户ID查询云记列表
+        List<Note> noteList = noteDao.queryNoteList(userId);
+
+        // 判断是否为空
+        if (noteList != null && noteList.size() > 0) {
+            resultInfo.setCode(1);
+            resultInfo.setResult(noteList);
+        }
+
+        return resultInfo;
+    }
+
+    public Integer deleteNote(String noteId) {
+        // 1. 判断参数
+        if (StrUtil.isBlank(noteId)) {
+            return 0;
+        }
+        // 2. 调用Dao层的更新方法，返回受影响的行数
+        int row = noteDao.deleteNoteById(noteId);
+        // 3. 判断受影响的行数是否大于0
+        if (row > 0) {
+            return 1;
+        }
+        return 0;
     }
 }

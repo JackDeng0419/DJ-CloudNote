@@ -25,6 +25,15 @@
                             <form class="form-horizontal" method="post" action="note">
                                 <%-- 隐藏域，用来存放用户行为的actionName--%>
                                 <input type="hidden" name="actionName" value="addOrUpdate">
+                                <%-- 设置隐藏域：用来存放noteId --%>
+                            <input type="hidden" name="noteId" value="${noteInfo.noteId}">
+
+                                <%-- 设置隐藏域：用来存放用户发布云记时所在地区的经纬度 --%>
+                                <%-- 经度 --%>
+                            <input type="hidden" name="lon" id="lon">
+                                <%-- 纬度 --%>
+                            <input type="hidden" name="lat" id="lat">
+
                                 <div class="form-group">
                                     <label for="typeId" class="col-sm-2 control-label">类别:</label>
                                     <div class="col-sm-8">
@@ -135,6 +144,24 @@
             }
             return true;
         }
+    </script>
+
+    <%-- 引用百度地图API文件，需要申请百度地图对应ak密钥--%>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5BgGbLnBbanFagxsXL6utjmFnMykOnLb"></script>
+    <script type="text/javascript">
+        /* 百度地图回去当前地址位置的经纬度 */
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function (r){
+            // 判断是否获取到
+            if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                console.log("您的位置：" + r.point.lng + "，" + r.point.lat);
+                // 将获取到的坐标设置给隐藏域
+                $("#lon").val(r.point.lng);
+                $("#lat").val(r.point.lat);
+            } else {
+                console.log("failed:" + thi.getStatus());
+            }
+        });
     </script>
 
 </div>

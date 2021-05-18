@@ -14,4 +14,7 @@ public class Note {
     private Integer typeId;
     private Date pubTime;
     private String typeName;
+
+    private Float lon; // 经度
+    private Float lat; // 纬度
 }

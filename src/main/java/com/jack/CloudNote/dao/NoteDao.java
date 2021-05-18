@@ -3,10 +3,12 @@ package com.jack.CloudNote.dao;
 import cn.hutool.core.util.StrUtil;
 import com.jack.CloudNote.po.Note;
 import com.jack.CloudNote.vo.NoteVo;
+import com.jack.CloudNote.vo.ResultInfo;
 import com.sun.xml.internal.rngom.parse.host.Base;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class NoteDao {
 
@@ -147,5 +149,33 @@ public class NoteDao {
         // 调用BaseDao的查询方法
         Note note = (Note) BaseDao.queryRow(sql, params, Note.class);
         return note;
+    }
+
+
+    public List<Note> queryNoteList(Integer userId) {
+        // 定义SQL语句
+        String sql = "select lon, lat from  tb_note n inner join tb_note_type t on n.typeId = t.typeId where userId = ?";
+
+        // 设置参数
+        List<Object> params = new ArrayList<>();
+        params.add(userId);
+
+        // 调用BaseDao
+        List<Note> list = BaseDao.queryRows(sql, params, Note.class);
+
+        return list;
+    }
+
+    public int deleteNoteById(String noteId) {
+        String sql = "delete from notes where noteId= ?";
+
+        // 设置参数
+        List<Object> params = new ArrayList<>();
+        params.add(noteId);
+
+        // 调用BaseDao
+        int row = BaseDao.executeUpdate(sql, params);
+
+        return row;
     }
 }

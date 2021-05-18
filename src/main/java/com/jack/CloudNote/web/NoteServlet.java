@@ -32,7 +32,22 @@ public class NoteServlet extends HttpServlet {
         } else if ("detail".equals(actionName)) {
             // 添加或修改云记
             detail(request, response);
+        } else if ("delete".equals(actionName)) {
+
+            // 删除云记
+            noteDelete(request, response);
+
         }
+    }
+
+    private void noteDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 1. 接收参数 （noteId）
+        String noteId = request.getParameter("noteId");
+        // 2. 调用Service层删除方法，返回状态码 （1=成功，0=失败）
+        Integer code = noteService.deleteNote(noteId);
+        // 3. 通过流将结果响应给ajax的回调函数 （输出字符串）
+        response.getWriter().write(code + "");
+        response.getWriter().close();
     }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -62,7 +77,7 @@ public class NoteServlet extends HttpServlet {
         String noteId = request.getParameter("noteId");
 
         // 2. 调用Service层方法，返回resultInfo对
-        ResultInfo<Note> resultInfo = noteService.addOrUpdate(typeId, title, content);
+        ResultInfo<Note> resultInfo = noteService.addOrUpdate(typeId, title, content, noteId, lon, lat);
 
         if(resultInfo.getCode() == 1) { // success add or update
             // redirect to index
