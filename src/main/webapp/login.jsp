@@ -56,23 +56,23 @@
     </div>
 </div>
 
-<!--bottom-->
-<div id="bottom">
-    <div id="copyright">
-        <div class="quick">
-            <ul>
-                <li><input type="button" class="quickbd iphone" onclick="location.href='http://lezijie.com'" /></li>
-                <li><input type="button" class="quickbd android" onclick="location.href='http://lezijie.com'" /></li>
-                <li><input type="button" class="quickbd pc" onclick="location.href='http://lezijie.com'" /></li>
-                <div class="clr"></div>
-            </ul>
-            <div class="clr"></div>
-        </div>
-        <div class="text">
-            Copyright © 2006-2026  <a href="http://www.shsxt.com">上海乐字节</a>  All Rights Reserved
-        </div>
-    </div>
-</div>
+<%--<!--bottom-->--%>
+<%--<div id="bottom">--%>
+<%--    <div id="copyright">--%>
+<%--        <div class="quick">--%>
+<%--            <ul>--%>
+<%--                <li><input type="button" class="quickbd iphone" onclick="location.href='http://lezijie.com'" /></li>--%>
+<%--                <li><input type="button" class="quickbd android" onclick="location.href='http://lezijie.com'" /></li>--%>
+<%--                <li><input type="button" class="quickbd pc" onclick="location.href='http://lezijie.com'" /></li>--%>
+<%--                <div class="clr"></div>--%>
+<%--            </ul>--%>
+<%--            <div class="clr"></div>--%>
+<%--        </div>--%>
+<%--        <div class="text">--%>
+<%--            Copyright © 2006-2026  <a href="http://www.shsxt.com">上海乐字节</a>  All Rights Reserved--%>
+<%--        </div>--%>
+<%--    </div>--%>
+<%--</div>--%>
 </body>
 
 </html>
